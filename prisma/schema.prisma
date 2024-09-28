@@ -34,15 +34,16 @@ model Session {
 }
 
 model User {
-  id            String         @id @default(cuid())
+  id            String    @id @default(cuid())
   name          String?
-  email         String?        @unique
+  email         String?   @unique
   emailVerified DateTime?
   image         String?
-  role          UserRole       @default(USER)
+  role          UserRole  @default(USER)
   accounts      Account[]
   sessions      Session[]
-  
+  selectedPlan  Plan?     @relation(fields: [selectedPlanid], references: [id])
+  selectedPlanid String?
 }
 
 model VerificationToken {
@@ -58,3 +59,18 @@ enum UserRole {
   USER
 }
 
+model Plan {
+  id           String      @id @default(cuid())
+  name         String
+  descriotion  String
+  price        Int
+  mealsPerDay  Int
+  mealOptions  MealOptions @default(BASIC)
+  order        Int         @default(1)
+  User         User[]
+}
+
+enum MealOptions {
+  BASIC
+  EXTENDED
+}
